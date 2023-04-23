@@ -1,5 +1,5 @@
 package assignment01;
-
+import java.util.logging.Logger;
 import java.awt.Graphics;
 import java.awt.event.*;
 import java.io.BufferedReader;
@@ -16,7 +16,7 @@ public class Board {
     SQLiteConnectionManager wordleDatabaseConnection;
     int secretWordIndex;
     int numberOfWords;
-
+    private static final Logger logger = Logger.getLogger(Board.class.getName());
     public Board(){
         wordleDatabaseConnection = new SQLiteConnectionManager("words.db");
         int setupStage = 0;
@@ -24,7 +24,7 @@ public class Board {
         wordleDatabaseConnection.createNewDatabase("words.db");
         if (wordleDatabaseConnection.checkIfConnectionDefined())
         {
-            System.out.println("Wordle created and connected.");
+            logger.info("Wordle created and connected.");
             if(wordleDatabaseConnection.createWordleTables())
             {
                 System.out.println("Wordle structures in place.");

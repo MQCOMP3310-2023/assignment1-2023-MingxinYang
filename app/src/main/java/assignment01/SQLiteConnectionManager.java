@@ -134,21 +134,31 @@ public class SQLiteConnectionManager {
      * @param index the id of the word entry to get
      * @return
      */
-    public String getWordAtIndex(int index){
+    public String getWordAtIndex(int index) {
         String sql = "SELECT word FROM validWords where id="+index+";";
         String result = "";
-        try (Connection conn = DriverManager.getConnection(databaseURL);
-            PreparedStatement pstmt = conn.prepareStatement(sql)) {          
-            ResultSet cursor = pstmt.executeQuery();
-            if(cursor.next()){
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet cursor = null;
+        try {
+            conn = DriverManager.getConnection(databaseURL);
+            pstmt = conn.prepareStatement(sql);
+            cursor = pstmt.executeQuery();
+            if(cursor.next()) {
                 System.out.println("Successful next curser sqlite");
                 result = cursor.getString(1);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        } finally {
+            try {              
+                if (conn != null) {
+                    conn.close();
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
         }
-        
-
         return result;
     }
 
